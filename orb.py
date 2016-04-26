@@ -17,21 +17,9 @@ conn = mysql.connect()
 cursor = conn.cursor()
 
 x = 0
-teamsDict = {}
-print 'pulling data for all teams'
-while requests.get('http://www.thebluealliance.com/api/v2/teams/'+str(x)+'?X-TBA-App-Id=frc4534:auto-scouting:3').json() != []:
-	page = requests.get('http://www.thebluealliance.com/api/v2/teams/'+str(x)+'?X-TBA-App-Id=frc4534:auto-scouting:3').json()
-	for team in page:
-		teamsDict[str(team['team_number'])] = team
-	x += 1
-print 'pulling data for events'
-allEvents = requests.get('http://www.thebluealliance.com/api/v2/events/2016?X-TBA-App-Id=frc4534:auto-scouting:3').json()
-eventTeams = {}
-for event in allEvents:
-	eventTeams[event['key']] = requests.get('http://www.thebluealliance.com/api/v2/event/'+event['key']+'/teams?X-TBA-App-Id=frc4534:auto-scouting:3').json()
-eventCodeList = []
-for i in eventTeams:
-	eventCodeList.append(i)
+teamsDict = orblibs.getTeams()
+eventTeams = orblibs.getEventTeams()
+
 
 
 
@@ -136,7 +124,7 @@ def teamsAtEvent(eventcode):
 	except:
 		return json.dumps({})
 
-# Returns a basic JSON object about that team. 
+# Returns a basic JSON object about that team.
 @app.route('/team/<number>/')
 def teamObject(number):
 	try:
@@ -144,7 +132,7 @@ def teamObject(number):
 	except:
 		return json.dumps({})
 
-# Returns the entire defense skill lineup for that team. 
+# Returns the entire defense skill lineup for that team.
 @app.route('/team/<number>/defense/')
 def databaseDefense(number):
 	try:
@@ -154,7 +142,7 @@ def databaseDefense(number):
 	except:
 		return json.dumps({})
 
-# Returns the defense skill for that team on defense X. 
+# Returns the defense skill for that team on defense X.
 @app.route('/team/<number>/defense/<defensenumber>/')
 def databaseDefenseNumber(number, defensenumber):
 	try:
@@ -215,11 +203,11 @@ def eventPredictions(eventcode):
 # @app.route('/work/match/')
 # def ():
 
-# # Parameters: (eventcode, matchidentifier) - Calculates the optimal defense selection for both alliances, returns result. 
+# # Parameters: (eventcode, matchidentifier) - Calculates the optimal defense selection for both alliances, returns result.
 # @app.route('/work/defense/')
 # def ():
 
-# Endpoint has alternate authentication, it is a webhook for TheBlueAlliance. Upcoming match notifications come here. Match prediction is evaluated and stored in a public display. 
+# Endpoint has alternate authentication, it is a webhook for TheBlueAlliance. Upcoming match notifications come here. Match prediction is evaluated and stored in a public display.
 @app.route('/work/match/upcoming/', methods=['POST','GET'])
 def upcoming():
 	if request.method == 'POST':

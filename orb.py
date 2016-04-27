@@ -266,17 +266,17 @@ def allianceScoring(eventcode, matchidentifier):
 		blueGoal.append((predictionTeams[predictionTeamNumbers[1][0]][0][2]+predictionTeams[predictionTeamNumbers[1][1]][0][2]+predictionTeams[predictionTeamNumbers[1][2]][0][2])*2)
 		blueGoal.append((predictionTeams[predictionTeamNumbers[1][0]][0][3]+predictionTeams[predictionTeamNumbers[1][1]][0][3]+predictionTeams[predictionTeamNumbers[1][2]][0][3])*5)
 		# PUT THE TOWER STUFF IN HERE
-		# redScale = []
-		# blueScale = []
-		# redScale.append((predictionTeams[predictionTeamNumbers[0][0]][2][0]+predictionTeams[predictionTeamNumbers[0][1]][2][0]+predictionTeams[predictionTeamNumbers[0][2]][2][0])*15)
-		# blueScale.append((predictionTeams[predictionTeamNumbers[1][0]][2][0]+predictionTeams[predictionTeamNumbers[1][1]][2][0]+predictionTeams[predictionTeamNumbers[1][2]][2][0])*15)
-		# redChallenge = []
-		# blueChallenge = []
-		# redChallenge.append((predictionTeams[predictionTeamNumbers[0][0]][3][0]+predictionTeams[predictionTeamNumbers[0][1]][3][0]+predictionTeams[predictionTeamNumbers[0][2]][3][0])*5)
-		# blueChallenge.append((predictionTeams[predictionTeamNumbers[1][0]][3][0]+predictionTeams[predictionTeamNumbers[1][1]][3][0]+predictionTeams[predictionTeamNumbers[1][2]][3][0])*5)
+		redScale = []
+		blueScale = []
+		redScale.append((predictionTeams[predictionTeamNumbers[0][0]][2][0]+predictionTeams[predictionTeamNumbers[0][1]][2][0]+predictionTeams[predictionTeamNumbers[0][2]][2][0])*15)
+		blueScale.append((predictionTeams[predictionTeamNumbers[1][0]][2][0]+predictionTeams[predictionTeamNumbers[1][1]][2][0]+predictionTeams[predictionTeamNumbers[1][2]][2][0])*15)
+		redChallenge = []
+		blueChallenge = []
+		redChallenge.append((predictionTeams[predictionTeamNumbers[0][0]][3][0]+predictionTeams[predictionTeamNumbers[0][1]][3][0]+predictionTeams[predictionTeamNumbers[0][2]][3][0])*5)
+		blueChallenge.append((predictionTeams[predictionTeamNumbers[1][0]][3][0]+predictionTeams[predictionTeamNumbers[1][1]][3][0]+predictionTeams[predictionTeamNumbers[1][2]][3][0])*5)
 
-	#	return json.dumps([sum(redDefense+redGoal+redScale+redChallenge),sum(blueDefense+blueGoal+blueScale+blueChallenge)])
-		return json.dumps([sum(redDefense+redGoal),sum(blueDefense+blueGoal)])
+		return json.dumps([sum(redDefense+redGoal+redScale+redChallenge),sum(blueDefense+blueGoal+blueScale+blueChallenge)])
+	#	return json.dumps([sum(redDefense+redGoal),sum(blueDefense+blueGoal)])
 
 	except:
 		return json.dumps({})

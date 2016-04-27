@@ -239,7 +239,7 @@ def teamScore(number):
 		teamDefenseSum = teamDefense[0]+teamDefense[1]+teamDefense[2]+teamDefense[3]+teamDefense[4]+teamDefense[5]+teamDefense[6]+teamDefense[7]+teamDefense[8]
 		teamScaleSum = teamScale[0]
 		teamChallengeSum = teamChallenge[0]
-		return json.dumps(teamDefenseSum + teamGoalSum + teamScaleSum + teamChallenge)
+		return json.dumps(teamGoalSum+teamDefenseSum+teamScaleSum+teamChallengeSum)
 	except:
 		return json.dumps({})
 

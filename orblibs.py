@@ -30,6 +30,7 @@ def getEventTeams():
 		f = open("./eventteams.pickle","r")
 		obj = pickle.load(f);
 		f.close()
+		print 'done'
 		return obj
 
 	print 'pulling data for events'

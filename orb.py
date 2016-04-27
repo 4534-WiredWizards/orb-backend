@@ -21,6 +21,8 @@ x = 0
 teamsDict = orblibs.getTeams()
 eventTeams, eventMatches, eventTeamsNumbers = orblibs.getEventTeams()
 
+
+
 # missingTeams = []
 # dbTeams = []
 # cursor.execute('select team from goal')
@@ -113,14 +115,24 @@ def index():
 		return json.dumps(['Project Orb.'])
 	except:
 		return json.dumps([])
-# Returns a list of teams at event identified by eventcode.
+# Returns a list of dictionaries for teams (and their data) at event identified by eventcode.
 @app.route('/list/<eventcode>/')
 def teamsAtEvent(eventcode):
-	try:
+	# try:
+	if 1:
 		token = request.headers['X-API-Token']
-		return json.dumps(eventTeams[eventcode])
-	except:
-		return json.dumps({})
+		teamList = eventTeamsNumbers[eventcode]
+		teamInfo = eventTeams[eventcode]
+		teamsAtEventList = []
+		for teamNumber in teamList:
+			teamDict = {}
+			teamDict['name'] = teamsDict[str(teamNumber)]['nickname']
+			teamDict['team_number'] = teamNumber
+			teamDict['stats'] = {"goals": json.loads(databaseGoals(teamNumber)), "defenses": json.loads(databaseDefense(teamNumber)), "challenge": json.loads(databaseChallenge(teamNumber)), "scale": json.loads(databaseScale(teamNumber)), "score": json.loads(teamScore(teamNumber))}
+			teamsAtEventList.append(teamDict)
+		return json.dumps(teamsAtEventList)
+	# except:
+	# 	return json.dumps({})
 
 # Returns a basic JSON object about that team. 
 @app.route('/team/<number>/')
@@ -136,7 +148,7 @@ def teamObject(number):
 def databaseDefense(number):
 	try:
 		token = request.headers['X-API-Token']
-		cursor.execute("select * from defense where team="+str(number))
+		cursor.execute("select `0`,`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8` from defense where team="+str(number))
 		data = cursor.fetchone()
 		return json.dumps(data)
 	except:
@@ -147,7 +159,7 @@ def databaseDefense(number):
 def databaseDefenseNumber(number, defensenumber):
 	try:
 		token = request.headers['X-API-Token']
-		cursor.execute("select "+str(defensenumber)+" from defense where team="+str(number))
+		cursor.execute("select `"+str(defensenumber)+"` from defense where team="+str(number))
 		data = cursor.fetchone()
 		return json.dumps(data)
 	except:
@@ -158,7 +170,7 @@ def databaseDefenseNumber(number, defensenumber):
 def databaseGoals(number):
 	try:
 		token = request.headers['X-API-Token']
-		cursor.execute("select * from goal where team="+str(number))
+		cursor.execute("select autolow, autohigh, teleoplow, teleophigh from goal where team="+str(number))
 		data = cursor.fetchone()
 		return json.dumps(data)
 	except:
@@ -186,18 +198,48 @@ def databaseGoalsHigh(number):
 	except:
 		return json.dumps({})
 
+# Gets a team's skill at challenging.
+@app.route('/team/<number>/challenge/')
+def databaseChallenge(number):
+	try:
+		token = request.headers['X-API-Token']
+		cursor.execute("select challenge_percent from challenge where team="+str(number))
+		data = cursor.fetchone()
+		return json.dumps(data)
+	except:
+		return json.dumps({})
+
+# Gets a team's skill at scaling.
+@app.route('/team/<number>/scale/')
+def databaseScale(number):
+	try:
+		token = request.headers['X-API-Token']
+		cursor.execute("select scale_percent from scale where team="+str(number))
+		data = cursor.fetchone()
+		return json.dumps(data)
+	except:
+		return json.dumps({})
+
+
 # Returns the team's score for rankings.
 @app.route('/team/<number>/score/')
 def teamScore(number):
 	try:
 		token = request.headers['X-API-Token']
-		cursor.execute('select * from goal where team='+str(number))
+		cursor.execute('select autolow, autohigh, teleoplow, teleophigh from goal where team='+str(number))
 		teamGoal = cursor.fetchone()
-		cursor.execute('select * from defense where team='+str(number))
+		cursor.execute('select `0`,`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8` from defense where team='+str(number))
 		teamDefense = cursor.fetchone()
-		teamGoalSum = teamGoal[1]+teamGoal[2]+teamGoal[3]+teamGoal[4]
-		teamDefenseSum = teamDefense[1]+teamDefense[2]+teamDefense[3]+teamDefense[4]+teamDefense[5]+teamDefense[6]+teamDefense[7]+teamDefense[8]+teamDefense[9]
-		return json.dumps(teamDefenseSum + teamGoalSum)
+		cursor.execute('select scale_percent from scale where team='+str(number))
+		teamScale = cursor.fetchone()
+		cursor.execute('select challenge_percent from challenge where team='+str(number))
+		teamChallenge = cursor.fetchone()
+
+		teamGoalSum = teamGoal[0]+teamGoal[1]+teamGoal[2]+teamGoal[3]
+		teamDefenseSum = teamDefense[0]+teamDefense[1]+teamDefense[2]+teamDefense[3]+teamDefense[4]+teamDefense[5]+teamDefense[6]+teamDefense[7]+teamDefense[8]
+		teamScaleSum = teamScale[0]
+		teamChallengeSum = teamChallenge[0]
+		return json.dumps(teamDefenseSum + teamGoalSum + teamScaleSum + teamChallenge)
 	except:
 		return json.dumps({})
 

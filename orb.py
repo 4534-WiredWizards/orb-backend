@@ -266,9 +266,9 @@ def allianceScoring(eventcode, matchidentifier):
 				teamGoal = cursor.fetchone()
 				cursor.execute('select `0`,`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8` from defense where team='+j)
 				teamDefense = cursor.fetchone()
-				cursor.execute('select * from scale where team='+i)
+				cursor.execute('select scale_percent from scale where team='+j)
 				teamScale = cursor.fetchone()
-				cursor.execute('select * from challenge where team='+i)
+				cursor.execute('select challenge_percent from challenge where team='+j)
 				teamChallenge = cursor.fetchone()
 				predictionTeams[j] = [teamGoal,teamDefense,teamScale,teamChallenge]
 		redDefense = []

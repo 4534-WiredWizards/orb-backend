@@ -146,8 +146,9 @@ def databaseDefense(number):
 		cursor.execute("select `0`,`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8` from defense where team="+str(number))
 		data = cursor.fetchone()
 		return json.dumps(data)
-	except:
+	except e:
 		return json.dumps({})
+                print "Error in /team/<number>/defense: " + str(e) 
 
 # Returns the defense skill for that team on defense X. 
 @app.route('/team/<number>/defense/<defensenumber>/')
@@ -275,23 +276,23 @@ def allianceScoring(eventcode, matchidentifier):
 		blueDefense = []
 		# [red or blue] [team] [goal or defense] [points or crossings]
 		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][0],predictionTeams[predictionTeamNumbers[0][1]][1][0],predictionTeams[predictionTeamNumbers[0][2]][1][0])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][1],predictionTeams[predictionTeamNumbers[0][1]][1][1],predictionTeams[predictionTeamNumbers[0][2]][1][1])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][2],predictionTeams[predictionTeamNumbers[0][1]][1][2],predictionTeams[predictionTeamNumbers[0][2]][1][2])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][3],predictionTeams[predictionTeamNumbers[0][1]][1][3],predictionTeams[predictionTeamNumbers[0][2]][1][3])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][4],predictionTeams[predictionTeamNumbers[0][1]][1][4],predictionTeams[predictionTeamNumbers[0][2]][1][4])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][5],predictionTeams[predictionTeamNumbers[0][1]][1][5],predictionTeams[predictionTeamNumbers[0][2]][1][5])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][6],predictionTeams[predictionTeamNumbers[0][1]][1][6],predictionTeams[predictionTeamNumbers[0][2]][1][6])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][7],predictionTeams[predictionTeamNumbers[0][1]][1][7],predictionTeams[predictionTeamNumbers[0][2]][1][7])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][8],predictionTeams[predictionTeamNumbers[0][1]][1][8],predictionTeams[predictionTeamNumbers[0][2]][1][8])*5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][1],predictionTeams[predictionTeamNumbers[0][1]][1][1],predictionTeams[predictionTeamNumbers[0][2]][1][1])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][2],predictionTeams[predictionTeamNumbers[0][1]][1][2],predictionTeams[predictionTeamNumbers[0][2]][1][2])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][3],predictionTeams[predictionTeamNumbers[0][1]][1][3],predictionTeams[predictionTeamNumbers[0][2]][1][3])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][4],predictionTeams[predictionTeamNumbers[0][1]][1][4],predictionTeams[predictionTeamNumbers[0][2]][1][4])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][5],predictionTeams[predictionTeamNumbers[0][1]][1][5],predictionTeams[predictionTeamNumbers[0][2]][1][5])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][6],predictionTeams[predictionTeamNumbers[0][1]][1][6],predictionTeams[predictionTeamNumbers[0][2]][1][6])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][7],predictionTeams[predictionTeamNumbers[0][1]][1][7],predictionTeams[predictionTeamNumbers[0][2]][1][7])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][8],predictionTeams[predictionTeamNumbers[0][1]][1][8],predictionTeams[predictionTeamNumbers[0][2]][1][8])*2.5)
 		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][0],predictionTeams[predictionTeamNumbers[1][1]][1][0],predictionTeams[predictionTeamNumbers[1][2]][1][0])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][1],predictionTeams[predictionTeamNumbers[1][1]][1][1],predictionTeams[predictionTeamNumbers[1][2]][1][1])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][2],predictionTeams[predictionTeamNumbers[1][1]][1][2],predictionTeams[predictionTeamNumbers[1][2]][1][2])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][3],predictionTeams[predictionTeamNumbers[1][1]][1][3],predictionTeams[predictionTeamNumbers[1][2]][1][3])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][4],predictionTeams[predictionTeamNumbers[1][1]][1][4],predictionTeams[predictionTeamNumbers[1][2]][1][4])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][5],predictionTeams[predictionTeamNumbers[1][1]][1][5],predictionTeams[predictionTeamNumbers[1][2]][1][5])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][6],predictionTeams[predictionTeamNumbers[1][1]][1][6],predictionTeams[predictionTeamNumbers[1][2]][1][6])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][7],predictionTeams[predictionTeamNumbers[1][1]][1][7],predictionTeams[predictionTeamNumbers[1][2]][1][7])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][8],predictionTeams[predictionTeamNumbers[1][1]][1][8],predictionTeams[predictionTeamNumbers[1][2]][1][8])*5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][1],predictionTeams[predictionTeamNumbers[1][1]][1][1],predictionTeams[predictionTeamNumbers[1][2]][1][1])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][2],predictionTeams[predictionTeamNumbers[1][1]][1][2],predictionTeams[predictionTeamNumbers[1][2]][1][2])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][3],predictionTeams[predictionTeamNumbers[1][1]][1][3],predictionTeams[predictionTeamNumbers[1][2]][1][3])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][4],predictionTeams[predictionTeamNumbers[1][1]][1][4],predictionTeams[predictionTeamNumbers[1][2]][1][4])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][5],predictionTeams[predictionTeamNumbers[1][1]][1][5],predictionTeams[predictionTeamNumbers[1][2]][1][5])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][6],predictionTeams[predictionTeamNumbers[1][1]][1][6],predictionTeams[predictionTeamNumbers[1][2]][1][6])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][7],predictionTeams[predictionTeamNumbers[1][1]][1][7],predictionTeams[predictionTeamNumbers[1][2]][1][7])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][8],predictionTeams[predictionTeamNumbers[1][1]][1][8],predictionTeams[predictionTeamNumbers[1][2]][1][8])*2.5)
 		redGoal = []
 		blueGoal = []
 		redGoal.append((predictionTeams[predictionTeamNumbers[0][0]][0][0]+predictionTeams[predictionTeamNumbers[0][1]][0][0]+predictionTeams[predictionTeamNumbers[0][2]][0][0])*5)
@@ -351,23 +352,23 @@ def optimalDefense(eventcode, matchidentifier):
 		blueDefense = []
 		# [red or blue] [team] [goal or defense] [points or crossings]
 		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][0],predictionTeams[predictionTeamNumbers[0][1]][1][0],predictionTeams[predictionTeamNumbers[0][2]][1][0])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][1],predictionTeams[predictionTeamNumbers[0][1]][1][1],predictionTeams[predictionTeamNumbers[0][2]][1][1])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][2],predictionTeams[predictionTeamNumbers[0][1]][1][2],predictionTeams[predictionTeamNumbers[0][2]][1][2])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][3],predictionTeams[predictionTeamNumbers[0][1]][1][3],predictionTeams[predictionTeamNumbers[0][2]][1][3])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][4],predictionTeams[predictionTeamNumbers[0][1]][1][4],predictionTeams[predictionTeamNumbers[0][2]][1][4])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][5],predictionTeams[predictionTeamNumbers[0][1]][1][5],predictionTeams[predictionTeamNumbers[0][2]][1][5])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][6],predictionTeams[predictionTeamNumbers[0][1]][1][6],predictionTeams[predictionTeamNumbers[0][2]][1][6])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][7],predictionTeams[predictionTeamNumbers[0][1]][1][7],predictionTeams[predictionTeamNumbers[0][2]][1][7])*5)
-		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][8],predictionTeams[predictionTeamNumbers[0][1]][1][8],predictionTeams[predictionTeamNumbers[0][2]][1][8])*5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][1],predictionTeams[predictionTeamNumbers[0][1]][1][1],predictionTeams[predictionTeamNumbers[0][2]][1][1])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][2],predictionTeams[predictionTeamNumbers[0][1]][1][2],predictionTeams[predictionTeamNumbers[0][2]][1][2])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][3],predictionTeams[predictionTeamNumbers[0][1]][1][3],predictionTeams[predictionTeamNumbers[0][2]][1][3])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][4],predictionTeams[predictionTeamNumbers[0][1]][1][4],predictionTeams[predictionTeamNumbers[0][2]][1][4])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][5],predictionTeams[predictionTeamNumbers[0][1]][1][5],predictionTeams[predictionTeamNumbers[0][2]][1][5])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][6],predictionTeams[predictionTeamNumbers[0][1]][1][6],predictionTeams[predictionTeamNumbers[0][2]][1][6])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][7],predictionTeams[predictionTeamNumbers[0][1]][1][7],predictionTeams[predictionTeamNumbers[0][2]][1][7])*2.5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][8],predictionTeams[predictionTeamNumbers[0][1]][1][8],predictionTeams[predictionTeamNumbers[0][2]][1][8])*2.5)
 		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][0],predictionTeams[predictionTeamNumbers[1][1]][1][0],predictionTeams[predictionTeamNumbers[1][2]][1][0])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][1],predictionTeams[predictionTeamNumbers[1][1]][1][1],predictionTeams[predictionTeamNumbers[1][2]][1][1])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][2],predictionTeams[predictionTeamNumbers[1][1]][1][2],predictionTeams[predictionTeamNumbers[1][2]][1][2])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][3],predictionTeams[predictionTeamNumbers[1][1]][1][3],predictionTeams[predictionTeamNumbers[1][2]][1][3])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][4],predictionTeams[predictionTeamNumbers[1][1]][1][4],predictionTeams[predictionTeamNumbers[1][2]][1][4])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][5],predictionTeams[predictionTeamNumbers[1][1]][1][5],predictionTeams[predictionTeamNumbers[1][2]][1][5])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][6],predictionTeams[predictionTeamNumbers[1][1]][1][6],predictionTeams[predictionTeamNumbers[1][2]][1][6])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][7],predictionTeams[predictionTeamNumbers[1][1]][1][7],predictionTeams[predictionTeamNumbers[1][2]][1][7])*5)
-		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][8],predictionTeams[predictionTeamNumbers[1][1]][1][8],predictionTeams[predictionTeamNumbers[1][2]][1][8])*5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][1],predictionTeams[predictionTeamNumbers[1][1]][1][1],predictionTeams[predictionTeamNumbers[1][2]][1][1])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][2],predictionTeams[predictionTeamNumbers[1][1]][1][2],predictionTeams[predictionTeamNumbers[1][2]][1][2])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][3],predictionTeams[predictionTeamNumbers[1][1]][1][3],predictionTeams[predictionTeamNumbers[1][2]][1][3])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][4],predictionTeams[predictionTeamNumbers[1][1]][1][4],predictionTeams[predictionTeamNumbers[1][2]][1][4])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][5],predictionTeams[predictionTeamNumbers[1][1]][1][5],predictionTeams[predictionTeamNumbers[1][2]][1][5])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][6],predictionTeams[predictionTeamNumbers[1][1]][1][6],predictionTeams[predictionTeamNumbers[1][2]][1][6])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][7],predictionTeams[predictionTeamNumbers[1][1]][1][7],predictionTeams[predictionTeamNumbers[1][2]][1][7])*2.5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][8],predictionTeams[predictionTeamNumbers[1][1]][1][8],predictionTeams[predictionTeamNumbers[1][2]][1][8])*2.5)
 		redGoal = []
 		blueGoal = []
 		redGoal.append((predictionTeams[predictionTeamNumbers[0][0]][0][0]+predictionTeams[predictionTeamNumbers[0][1]][0][0]+predictionTeams[predictionTeamNumbers[0][2]][0][0])*5)
@@ -462,7 +463,7 @@ def upcoming():
 
 
 def threadTeamsTrain(matchTeams,eventTeams):
-	for i in matchTeams:
+        for i in matchTeams:
 		teamEvents = []
 		for j in eventTeams:
 			for k in eventTeams[j]:
@@ -486,7 +487,7 @@ def score():
 				matchTeams.append(i[3:])
 			for i in notification['message_data']['match']['alliances']['blue']['teams']:
 				matchTeams.append(i[3:])
-			thread.start_new_thread(threadTeamsTrain, (matchTeams, eventTeams))
+			#thread.start_new_thread(threadTeamsTrain, (matchTeams, eventTeams))
 		return "ok"
 
 

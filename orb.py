@@ -94,10 +94,6 @@ eventTeams, eventMatches, eventTeamsNumbers = orblibs.getEventTeams()
 # 		print "altered database values in goal and defense tables for team",i
 # 	index += 1
 
-
-
-
-
 def addResultsToDatabase(ret,teamNumber):
 	print ret
 	cursor.execute("delete from goal where team="+str(teamNumber))
@@ -111,16 +107,15 @@ def addResultsToDatabase(ret,teamNumber):
 @app.route('/')
 def index():
 	try:
-#		token = request.headers['X-API-Token']
+		token = request.args.get('token')
 		return json.dumps(['Project Orb.'])
 	except:
 		return json.dumps([])
 # Returns a list of dictionaries for teams (and their data) at event identified by eventcode.
 @app.route('/list/<eventcode>/')
 def teamsAtEvent(eventcode):
-	# try:
-	if 1:
-#		token = request.headers['X-API-Token']
+	try:
+		token = request.args.get('token')
 		teamList = eventTeamsNumbers[eventcode]
 		teamInfo = eventTeams[eventcode]
 		teamsAtEventList = []
@@ -131,14 +126,14 @@ def teamsAtEvent(eventcode):
 			teamDict['stats'] = {"goals": json.loads(databaseGoals(teamNumber)), "defenses": json.loads(databaseDefense(teamNumber)), "challenge": json.loads(databaseChallenge(teamNumber)), "scale": json.loads(databaseScale(teamNumber)), "score": json.loads(teamScore(teamNumber))}
 			teamsAtEventList.append(teamDict)
 		return json.dumps(teamsAtEventList)
-	# except:
-	# 	return json.dumps({})
+	except:
+		return json.dumps({})
 
 # Returns a basic JSON object about that team. 
 @app.route('/team/<number>/')
 def teamObject(number):
 	try:
-#		token = request.headers['X-API-Token']
+		token = request.args.get('token')
 		return json.dumps(teamsDict[number])
 	except:
 		return json.dumps({})
@@ -147,7 +142,7 @@ def teamObject(number):
 @app.route('/team/<number>/defense/')
 def databaseDefense(number):
 	try:
-#		token = request.headers['X-API-Token']
+		token = request.args.get('token')
 		cursor.execute("select `0`,`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8` from defense where team="+str(number))
 		data = cursor.fetchone()
 		return json.dumps(data)
@@ -158,7 +153,7 @@ def databaseDefense(number):
 @app.route('/team/<number>/defense/<defensenumber>/')
 def databaseDefenseNumber(number, defensenumber):
 	try:
-#		token = request.headers['X-API-Token']
+		token = request.args.get('token')
 		cursor.execute("select `"+str(defensenumber)+"` from defense where team="+str(number))
 		data = cursor.fetchone()
 		return json.dumps(data)
@@ -169,7 +164,7 @@ def databaseDefenseNumber(number, defensenumber):
 @app.route('/team/<number>/goals/')
 def databaseGoals(number):
 	try:
-#		token = request.headers['X-API-Token']
+		token = request.args.get('token')
 		cursor.execute("select autolow, autohigh, teleoplow, teleophigh from goal where team="+str(number))
 		data = cursor.fetchone()
 		return json.dumps(data)
@@ -180,7 +175,7 @@ def databaseGoals(number):
 @app.route('/team/<number>/goals/low/')
 def databaseGoalsLow(number):
 	try:
-#		token = request.headers['X-API-Token']
+		token = request.args.get('token')
 		cursor.execute("select autolow, teleoplow from goal where team="+str(number))
 		data = cursor.fetchone()
 		return json.dumps(data)
@@ -191,7 +186,7 @@ def databaseGoalsLow(number):
 @app.route('/team/<number>/goals/high/')
 def databaseGoalsHigh(number):
 	try:
-#		token = request.headers['X-API-Token']
+		token = request.args.get('token')
 		cursor.execute("select autohigh, teleophigh from goal where team="+str(number))
 		data = cursor.fetchone()
 		return json.dumps(data)
@@ -202,7 +197,7 @@ def databaseGoalsHigh(number):
 @app.route('/team/<number>/challenge/')
 def databaseChallenge(number):
 	try:
-#		token = request.headers['X-API-Token']
+		token = request.args.get('token')
 		cursor.execute("select challenge_percent from challenge where team="+str(number))
 		data = cursor.fetchone()
 		return json.dumps(data)
@@ -213,7 +208,7 @@ def databaseChallenge(number):
 @app.route('/team/<number>/scale/')
 def databaseScale(number):
 	try:
-#		token = request.headers['X-API-Token']
+		token = request.args.get('token')
 		cursor.execute("select scale_percent from scale where team="+str(number))
 		data = cursor.fetchone()
 		return json.dumps(data)
@@ -225,7 +220,7 @@ def databaseScale(number):
 @app.route('/team/<number>/score/')
 def teamScore(number):
 	try:
-#		token = request.headers['X-API-Token']
+		token = request.args.get('token')
 		cursor.execute('select autolow, autohigh, teleoplow, teleophigh from goal where team='+str(number))
 		teamGoal = cursor.fetchone()
 		cursor.execute('select `0`,`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8` from defense where team='+str(number))
@@ -255,7 +250,7 @@ def teamScore(number):
 @app.route('/work/match/<eventcode>/<matchidentifier>')
 def allianceScoring(eventcode, matchidentifier):
 	try:
-#		token = request.headers['X-API-Token']
+		token = request.args.get('token')
 		predictionTeamNumbers = [[],[]]
 		predictionTeams = {}
 		for i in eventMatches[eventcode]:

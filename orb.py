@@ -342,11 +342,11 @@ def optimalDefense(eventcode, matchidentifier):
 				teamGoal = cursor.fetchone()
 				cursor.execute('select `0`,`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8` from defense where team='+j)
 				teamDefense = cursor.fetchone()
-				cursor.execute('select scale_percent from scale where team='+j)
-				teamScale = cursor.fetchone()
-				cursor.execute('select challenge_percent from challenge where team='+j)
-				teamChallenge = cursor.fetchone()
-				predictionTeams[j] = [teamGoal,teamDefense,teamScale,teamChallenge]
+				# cursor.execute('select scale_percent from scale where team='+j)
+				# teamScale = cursor.fetchone()
+				# cursor.execute('select challenge_percent from challenge where team='+j)
+				# teamChallenge = cursor.fetchone()
+				# predictionTeams[j] = [teamGoal,teamDefense,teamScale,teamChallenge]
 		redDefense = []
 		blueDefense = []
 		# [red or blue] [team] [goal or defense] [points or crossings]
@@ -379,16 +379,68 @@ def optimalDefense(eventcode, matchidentifier):
 		blueGoal.append((predictionTeams[predictionTeamNumbers[1][0]][0][2]+predictionTeams[predictionTeamNumbers[1][1]][0][2]+predictionTeams[predictionTeamNumbers[1][2]][0][2])*2)
 		blueGoal.append((predictionTeams[predictionTeamNumbers[1][0]][0][3]+predictionTeams[predictionTeamNumbers[1][1]][0][3]+predictionTeams[predictionTeamNumbers[1][2]][0][3])*5)
 		# PUT THE TOWER STUFF IN HERE
-		redScale = []
-		blueScale = []
-		redScale.append((predictionTeams[predictionTeamNumbers[0][0]][2][0]+predictionTeams[predictionTeamNumbers[0][1]][2][0]+predictionTeams[predictionTeamNumbers[0][2]][2][0])*15)
-		blueScale.append((predictionTeams[predictionTeamNumbers[1][0]][2][0]+predictionTeams[predictionTeamNumbers[1][1]][2][0]+predictionTeams[predictionTeamNumbers[1][2]][2][0])*15)
-		redChallenge = []
-		blueChallenge = []
-		redChallenge.append((predictionTeams[predictionTeamNumbers[0][0]][3][0]+predictionTeams[predictionTeamNumbers[0][1]][3][0]+predictionTeams[predictionTeamNumbers[0][2]][3][0])*5)
-		blueChallenge.append((predictionTeams[predictionTeamNumbers[1][0]][3][0]+predictionTeams[predictionTeamNumbers[1][1]][3][0]+predictionTeams[predictionTeamNumbers[1][2]][3][0])*5)
+		# redScale = []
+		# blueScale = []
+		# redScale.append((predictionTeams[predictionTeamNumbers[0][0]][2][0]+predictionTeams[predictionTeamNumbers[0][1]][2][0]+predictionTeams[predictionTeamNumbers[0][2]][2][0])*15)
+		# blueScale.append((predictionTeams[predictionTeamNumbers[1][0]][2][0]+predictionTeams[predictionTeamNumbers[1][1]][2][0]+predictionTeams[predictionTeamNumbers[1][2]][2][0])*15)
+		# redChallenge = []
+		# blueChallenge = []
+		# redChallenge.append((predictionTeams[predictionTeamNumbers[0][0]][3][0]+predictionTeams[predictionTeamNumbers[0][1]][3][0]+predictionTeams[predictionTeamNumbers[0][2]][3][0])*5)
+		# blueChallenge.append((predictionTeams[predictionTeamNumbers[1][0]][3][0]+predictionTeams[predictionTeamNumbers[1][1]][3][0]+predictionTeams[predictionTeamNumbers[1][2]][3][0])*5)
 
-		return json.dumps([redDefense])
+		redOptimalDefenses = [[],[]]
+		if redDefense[1] > redDefense[2]:
+			redOptimalDefenses[0].append("Portcullis")
+			redOptimalDefenses[1].append("Cheval de Frise")
+		else:
+			redOptimalDefenses[1].append("Portcullis")
+			redOptimalDefenses[0].append("Cheval de Frise")
+		if redDefense[3] > redDefense[4]:
+			redOptimalDefenses[0].append("Moat")
+			redOptimalDefenses[1].append("Ramparts")
+		else:
+			redOptimalDefenses[1].append("Moat")
+			redOptimalDefenses[0].append("Ramparts")
+		if redDefense[5] > redDefense[6]:
+			redOptimalDefenses[0].append("Drawbridge")
+			redOptimalDefenses[1].append("Sally Port")
+		else:
+			redOptimalDefenses[1].append("Drawbridge")
+			redOptimalDefenses[0].append("Sally Port")
+		if redDefense[7] > redDefense[8]:
+			redOptimalDefenses[0].append("Rock Wall")
+			redOptimalDefenses[1].append("Rough Terrain")
+		else:
+			redOptimalDefenses[1].append("Rock Wall")
+			redOptimalDefenses[0].append("Rough Terrain")
+
+		blueOptimalDefenses = [[],[]]
+		if blueDefense[1] > blueDefense[2]:
+			blueOptimalDefenses[0].append("Portcullis")
+			blueOptimalDefenses[1].append("Cheval de Frise")
+		else:
+			blueOptimalDefenses[1].append("Portcullis")
+			blueOptimalDefenses[0].append("Cheval de Frise")
+		if blueDefense[3] > blueDefense[4]:
+			blueOptimalDefenses[0].append("Moat")
+			blueOptimalDefenses[1].append("Ramparts")
+		else:
+			blueOptimalDefenses[1].append("Moat")
+			blueOptimalDefenses[0].append("Ramparts")
+		if blueDefense[5] > blueDefense[6]:
+			blueOptimalDefenses[0].append("Drawbridge")
+			blueOptimalDefenses[1].append("Sally Port")
+		else:
+			blueOptimalDefenses[1].append("Drawbridge")
+			blueOptimalDefenses[0].append("Sally Port")
+		if blueDefense[7] > blueDefense[8]:
+			blueOptimalDefenses[0].append("Rock Wall")
+			blueOptimalDefenses[1].append("Rough Terrain")
+		else:
+			blueOptimalDefenses[1].append("Rock Wall")
+			blueOptimalDefenses[0].append("Rough Terrain")
+
+		return json.dumps([redOptimalDefenses,blueOptimalDefenses])
 
 	#	return json.dumps([sum(redDefense+redGoal+redScale+redChallenge),sum(blueDefense+blueGoal+blueScale+blueChallenge)])
 	#	return json.dumps([sum(redDefense+redGoal),sum(blueDefense+blueGoal)])

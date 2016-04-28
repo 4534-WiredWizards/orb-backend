@@ -322,9 +322,80 @@ def allianceScoring(eventcode, matchidentifier):
 
 
 
-# # Parameters: (eventcode, matchidentifier) - Calculates the optimal defense selection for both alliances, returns result. 
-# @app.route('/work/defense/')
-# def ():
+# Parameters: (eventcode, matchidentifier) - Calculates the optimal defense selection for both alliances, returns result. 
+@app.route('/work/defense/<eventcode>/<matchidentifier>')
+def optimalDefense(eventcode, matchidentifier):
+	try:
+		token = request.args.get('token')
+		predictionTeamNumbers = [[],[]]
+		predictionTeams = {}
+		for i in eventMatches[eventcode]:
+			if i['key'] == matchidentifier:
+				for j in i['alliances']['red']['teams']:
+					predictionTeamNumbers[0].append(j[3:])
+				for j in i['alliances']['blue']['teams']:
+					predictionTeamNumbers[1].append(j[3:])
+
+		for i in predictionTeamNumbers:
+			for j in i:
+				cursor.execute('select autolow, autohigh, teleoplow, teleophigh from goal where team='+j)
+				teamGoal = cursor.fetchone()
+				cursor.execute('select `0`,`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8` from defense where team='+j)
+				teamDefense = cursor.fetchone()
+				cursor.execute('select scale_percent from scale where team='+j)
+				teamScale = cursor.fetchone()
+				cursor.execute('select challenge_percent from challenge where team='+j)
+				teamChallenge = cursor.fetchone()
+				predictionTeams[j] = [teamGoal,teamDefense,teamScale,teamChallenge]
+		redDefense = []
+		blueDefense = []
+		# [red or blue] [team] [goal or defense] [points or crossings]
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][0],predictionTeams[predictionTeamNumbers[0][1]][1][0],predictionTeams[predictionTeamNumbers[0][2]][1][0])*5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][1],predictionTeams[predictionTeamNumbers[0][1]][1][1],predictionTeams[predictionTeamNumbers[0][2]][1][1])*5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][2],predictionTeams[predictionTeamNumbers[0][1]][1][2],predictionTeams[predictionTeamNumbers[0][2]][1][2])*5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][3],predictionTeams[predictionTeamNumbers[0][1]][1][3],predictionTeams[predictionTeamNumbers[0][2]][1][3])*5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][4],predictionTeams[predictionTeamNumbers[0][1]][1][4],predictionTeams[predictionTeamNumbers[0][2]][1][4])*5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][5],predictionTeams[predictionTeamNumbers[0][1]][1][5],predictionTeams[predictionTeamNumbers[0][2]][1][5])*5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][6],predictionTeams[predictionTeamNumbers[0][1]][1][6],predictionTeams[predictionTeamNumbers[0][2]][1][6])*5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][7],predictionTeams[predictionTeamNumbers[0][1]][1][7],predictionTeams[predictionTeamNumbers[0][2]][1][7])*5)
+		redDefense.append(max(predictionTeams[predictionTeamNumbers[0][0]][1][8],predictionTeams[predictionTeamNumbers[0][1]][1][8],predictionTeams[predictionTeamNumbers[0][2]][1][8])*5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][0],predictionTeams[predictionTeamNumbers[1][1]][1][0],predictionTeams[predictionTeamNumbers[1][2]][1][0])*5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][1],predictionTeams[predictionTeamNumbers[1][1]][1][1],predictionTeams[predictionTeamNumbers[1][2]][1][1])*5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][2],predictionTeams[predictionTeamNumbers[1][1]][1][2],predictionTeams[predictionTeamNumbers[1][2]][1][2])*5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][3],predictionTeams[predictionTeamNumbers[1][1]][1][3],predictionTeams[predictionTeamNumbers[1][2]][1][3])*5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][4],predictionTeams[predictionTeamNumbers[1][1]][1][4],predictionTeams[predictionTeamNumbers[1][2]][1][4])*5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][5],predictionTeams[predictionTeamNumbers[1][1]][1][5],predictionTeams[predictionTeamNumbers[1][2]][1][5])*5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][6],predictionTeams[predictionTeamNumbers[1][1]][1][6],predictionTeams[predictionTeamNumbers[1][2]][1][6])*5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][7],predictionTeams[predictionTeamNumbers[1][1]][1][7],predictionTeams[predictionTeamNumbers[1][2]][1][7])*5)
+		blueDefense.append(max(predictionTeams[predictionTeamNumbers[1][0]][1][8],predictionTeams[predictionTeamNumbers[1][1]][1][8],predictionTeams[predictionTeamNumbers[1][2]][1][8])*5)
+		redGoal = []
+		blueGoal = []
+		redGoal.append((predictionTeams[predictionTeamNumbers[0][0]][0][0]+predictionTeams[predictionTeamNumbers[0][1]][0][0]+predictionTeams[predictionTeamNumbers[0][2]][0][0])*5)
+		redGoal.append((predictionTeams[predictionTeamNumbers[0][0]][0][1]+predictionTeams[predictionTeamNumbers[0][1]][0][1]+predictionTeams[predictionTeamNumbers[0][2]][0][1])*10)
+		redGoal.append((predictionTeams[predictionTeamNumbers[0][0]][0][2]+predictionTeams[predictionTeamNumbers[0][1]][0][2]+predictionTeams[predictionTeamNumbers[0][2]][0][2])*2)
+		redGoal.append((predictionTeams[predictionTeamNumbers[0][0]][0][3]+predictionTeams[predictionTeamNumbers[0][1]][0][3]+predictionTeams[predictionTeamNumbers[0][2]][0][3])*5)
+		blueGoal.append((predictionTeams[predictionTeamNumbers[1][0]][0][0]+predictionTeams[predictionTeamNumbers[1][1]][0][0]+predictionTeams[predictionTeamNumbers[1][2]][0][0])*5)
+		blueGoal.append((predictionTeams[predictionTeamNumbers[1][0]][0][1]+predictionTeams[predictionTeamNumbers[1][1]][0][1]+predictionTeams[predictionTeamNumbers[1][2]][0][1])*10)
+		blueGoal.append((predictionTeams[predictionTeamNumbers[1][0]][0][2]+predictionTeams[predictionTeamNumbers[1][1]][0][2]+predictionTeams[predictionTeamNumbers[1][2]][0][2])*2)
+		blueGoal.append((predictionTeams[predictionTeamNumbers[1][0]][0][3]+predictionTeams[predictionTeamNumbers[1][1]][0][3]+predictionTeams[predictionTeamNumbers[1][2]][0][3])*5)
+		# PUT THE TOWER STUFF IN HERE
+		redScale = []
+		blueScale = []
+		redScale.append((predictionTeams[predictionTeamNumbers[0][0]][2][0]+predictionTeams[predictionTeamNumbers[0][1]][2][0]+predictionTeams[predictionTeamNumbers[0][2]][2][0])*15)
+		blueScale.append((predictionTeams[predictionTeamNumbers[1][0]][2][0]+predictionTeams[predictionTeamNumbers[1][1]][2][0]+predictionTeams[predictionTeamNumbers[1][2]][2][0])*15)
+		redChallenge = []
+		blueChallenge = []
+		redChallenge.append((predictionTeams[predictionTeamNumbers[0][0]][3][0]+predictionTeams[predictionTeamNumbers[0][1]][3][0]+predictionTeams[predictionTeamNumbers[0][2]][3][0])*5)
+		blueChallenge.append((predictionTeams[predictionTeamNumbers[1][0]][3][0]+predictionTeams[predictionTeamNumbers[1][1]][3][0]+predictionTeams[predictionTeamNumbers[1][2]][3][0])*5)
+
+		return json.dumps([redDefense])
+
+	#	return json.dumps([sum(redDefense+redGoal+redScale+redChallenge),sum(blueDefense+blueGoal+blueScale+blueChallenge)])
+	#	return json.dumps([sum(redDefense+redGoal),sum(blueDefense+blueGoal)])
+
+	except:
+		return json.dumps({})
+
 
 # Endpoint has alternate authentication, it is a webhook for TheBlueAlliance. Upcoming match notifications come here. Match prediction is evaluated and stored in a public display. 
 @app.route('/work/match/upcoming/', methods=['POST','GET'])

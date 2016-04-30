@@ -256,6 +256,7 @@ def allianceScoring(eventcode, matchidentifier):
 		predictionTeams = {}
 		for i in eventMatches[eventcode]:
 			if i['key'] == matchidentifier:
+				level = i['comp_level']
 				for j in i['alliances']['red']['teams']:
 					predictionTeamNumbers[0].append(j[3:])
 				for j in i['alliances']['blue']['teams']:
@@ -312,8 +313,39 @@ def allianceScoring(eventcode, matchidentifier):
 		blueChallenge = []
 		redChallenge.append((predictionTeams[predictionTeamNumbers[0][0]][3][0]+predictionTeams[predictionTeamNumbers[0][1]][3][0]+predictionTeams[predictionTeamNumbers[0][2]][3][0])*5)
 		blueChallenge.append((predictionTeams[predictionTeamNumbers[1][0]][3][0]+predictionTeams[predictionTeamNumbers[1][1]][3][0]+predictionTeams[predictionTeamNumbers[1][2]][3][0])*5)
+		
+		# ELIMINATIONS STUFF
 
-		return json.dumps([sum(redDefense+redGoal+redScale+redChallenge),sum(blueDefense+blueGoal+blueScale+blueChallenge)])
+		redBreach = 0
+		blueBreach = 0
+		redBreachArray = []
+		redCapture = 0
+		blueBreachArray = []
+		blueCapture = 0
+
+		if level != "qm":
+			if sum(redGoal) > 10:
+				redCapture = min(predictionTeams[predictionTeamNumbers[0][0]][3][0],predictionTeams[predictionTeamNumbers[0][1]][3][0],predictionTeams[predictionTeamNumbers[0][2]][3][0]) * 20
+			if sum(blueGoal) > 10:
+				blueCapture = min(predictionTeams[predictionTeamNumbers[1][0]][3][0]+predictionTeams[predictionTeamNumbers[1][1]][3][0]+predictionTeams[predictionTeamNumbers[1][2]][3][0])*20
+			
+
+			redBreachArray.append(redDefense[0]/5)
+			for defensenum in range(1,10):
+				redBreachArray.append(redDefense[defensenum]/2.5)
+			blueBreachArray.append(blueDefense[0]/5)
+			for defensenum in range(1,10):
+				blueBreachArray.append(blueDefense[defensenum]/2.5)
+			redBreachSum = sum(redBreachArray)*(5/9)
+			blueBreachSum = sum(blueBreachArray)*(5/9)
+
+			if redBreachSum > 8:
+				redBreach = 25
+			if blueBreachSum > 8:
+				blueBreach = 25
+
+
+		return json.dumps([sum(redDefense+redGoal+redScale+redChallenge+redBreach+redCapture),sum(blueDefense+blueGoal+blueScale+blueChallenge+blueBreach+blueCapture)])
 	#	return json.dumps([sum(redDefense+redGoal),sum(blueDefense+blueGoal)])
 
 	except:

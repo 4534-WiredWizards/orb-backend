@@ -326,7 +326,8 @@ def allianceScoring(eventcode, matchidentifier):
 # Parameters: (eventcode, matchidentifier) - Calculates the optimal defense selection for both alliances, returns result. 
 @app.route('/work/defense/<eventcode>/<matchidentifier>')
 def optimalDefense(eventcode, matchidentifier):
-	try:
+#	try:
+	if 1:
 		token = request.args.get('token')
 		predictionTeamNumbers = [[],[]]
 		predictionTeams = {}
@@ -347,7 +348,7 @@ def optimalDefense(eventcode, matchidentifier):
 				# teamScale = cursor.fetchone()
 				# cursor.execute('select challenge_percent from challenge where team='+j)
 				# teamChallenge = cursor.fetchone()
-				# predictionTeams[j] = [teamGoal,teamDefense,teamScale,teamChallenge]
+				predictionTeams[j] = [teamGoal,teamDefense]
 		redDefense = []
 		blueDefense = []
 		# [red or blue] [team] [goal or defense] [points or crossings]
@@ -446,8 +447,8 @@ def optimalDefense(eventcode, matchidentifier):
 	#	return json.dumps([sum(redDefense+redGoal+redScale+redChallenge),sum(blueDefense+blueGoal+blueScale+blueChallenge)])
 	#	return json.dumps([sum(redDefense+redGoal),sum(blueDefense+blueGoal)])
 
-	except:
-		return json.dumps({})
+#	except:
+#		return json.dumps({})
 
 
 # Endpoint has alternate authentication, it is a webhook for TheBlueAlliance. Upcoming match notifications come here. Match prediction is evaluated and stored in a public display. 

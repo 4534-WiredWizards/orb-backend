@@ -7,3 +7,6 @@ Uses Flask to offer a public-facing API utilizing neural networks for per-team d
 >**Sam Weaver, Team 4534 (Programming Lead)**
 
 documentation pending
+
+# LICENSE
+This code is provided under the GNU General Public License Version 3, which is provided in the file called LICENSE in the root of this repository.
